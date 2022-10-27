@@ -8,7 +8,7 @@ on:
       - v*
 
 env:
-  IMAGE_NAME: prisma-flowdiagram/prisma-flowdiagram-shinyapp
+  IMAGE_NAME: rayyansys/prisma-flowdiagram-shinyapp
 
 jobs:
   docker:
