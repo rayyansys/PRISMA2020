@@ -66,6 +66,12 @@ ui <- tagList(
           ),
           "You can provide the numbers in the data entry section
           of the 'Create flow diagram' tab.
+          These numbers will be initialised to any values provided in the
+          URL query string. For example, if you provide the URL path:
+          '?website_results=100&organisation_results=200', this will initialise
+          the website results to 100 and the organisation results to 200.
+          The name of the query string parameter should match the name of the
+          'data' column in the template file below.
           Alternatively, to allow for more customisation,
           you can use the template file below.",
           br(),
@@ -376,13 +382,22 @@ ui <- tagList(
 )
 
 # Define server logic required to draw a histogram
-server <- function(input, output) {
+server <- function(input, output, session) {
   # Define reactive values
   rv <- shiny::reactiveValues()
   # Data Handling ----
   # Use template data to populate editable table
   observe({
     if (is.null(input$data_upload)) {
+      # Override default template with query string parameters if present
+      query <- parseQueryString(session$clientData$url_search)
+      if (length(query) > 0) {
+        for (i in seq_len(nrow(template))) {
+          if (!is.null(query[[template[i, "data"]]])) {
+            template[i, "n"] <- query[[template[i, "data"]]]
+          }
+        }
+      }
       # Create inital value that is passed to UI
       rv$data_initial <- template
       # Create version that is edited and passed to graphing function
