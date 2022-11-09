@@ -44,7 +44,100 @@ ui <- tagList(
     title=div(img(src="rayyan.svg")),
     position = "fixed-top",
     # Tab 1 ----
-    tabPanel("Home",
+    tabPanel(
+      "Create diagram",
+      shinyjs::useShinyjs(),
+      sidebarLayout(
+        sidebarPanel(
+          style = "overflow-y:scroll; max-height: 900px; position:relative;",
+          tags$head(
+            tags$style(
+              HTML(
+                ".shiny-split-layout > div { overflow: visible; }"
+              )
+            )
+          ),
+          h3("Main options"),
+          splitLayout(
+            selectInput(
+              "previous",
+              "Previous studies",
+              choices <- c(
+                "Not included",
+                "Included"
+              )
+            ),
+            selectInput(
+              "other",
+              "Other searches for studies",
+              choices <- c(
+                "Included",
+                "Not included"
+              )
+            )
+          ),
+          splitLayout(
+            selectInput(
+              "dbDetail",
+              "Individual databases",
+              choices = c(
+                "Not included",
+                "Included"
+              )
+            ),
+            selectInput(
+              "regDetail",
+              "Individual registers",
+              choices = c(
+                "Not Included",
+                "Included"
+              )
+            )
+          ),
+          hr(),
+          actionButton(
+            "reset",
+            "Click to reset"
+          ),
+          div(
+            id = "inputs",
+            h3("Identification"),
+            uiOutput("selection")
+          ),
+          hr(),
+          h3("Download"),
+          downloadButton(
+            "PRISMAflowdiagramPDF",
+            "PDF"
+          ),
+          downloadButton(
+            "PRISMAflowdiagramPNG",
+            "PNG"
+          ),
+          downloadButton(
+            "PRISMAflowdiagramSVG",
+            "SVG"
+          ),
+          downloadButton(
+            "PRISMAflowdiagramHTML",
+            "Interactive HTML"
+          ),
+          downloadButton(
+            "PRISMAflowdiagramZIP",
+            "Interactive HTML (ZIP)"
+          )
+        ),
+        mainPanel(
+          DiagrammeR::grVizOutput(
+            outputId = "plot1",
+            width = "100%",
+            height = "700px"
+          )
+        )
+      )
+    ),
+    # Tab 2 ----
+    tabPanel("Credits",
       fluidRow(
         column(10, offset = 1,
           "Systematic reviews should be described in
@@ -165,99 +258,6 @@ ui <- tagList(
             )
           ),
           "Created November 2020, Updated June 2022"
-        )
-      )
-    ),
-    # Tab 2 ----
-    tabPanel(
-      "Create flow diagram",
-      shinyjs::useShinyjs(),
-      sidebarLayout(
-        sidebarPanel(
-          style = "overflow-y:scroll; max-height: 900px; position:relative;",
-          tags$head(
-            tags$style(
-              HTML(
-                ".shiny-split-layout > div { overflow: visible; }"
-              )
-            )
-          ),
-          h3("Main options"),
-          splitLayout(
-            selectInput(
-              "previous",
-              "Previous studies",
-              choices <- c(
-                "Not included",
-                "Included"
-              )
-            ),
-            selectInput(
-              "other",
-              "Other searches for studies",
-              choices <- c(
-                "Included",
-                "Not included"
-              )
-            )
-          ),
-          splitLayout(
-            selectInput(
-              "dbDetail",
-              "Individual databases",
-              choices = c(
-                "Not included",
-                "Included"
-              )
-            ),
-            selectInput(
-              "regDetail",
-              "Individual registers",
-              choices = c(
-                "Not Included",
-                "Included"
-              )
-            )
-          ),
-          hr(),
-          actionButton(
-            "reset",
-            "Click to reset"
-          ),
-          div(
-            id = "inputs",
-            h3("Identification"),
-            uiOutput("selection")
-          ),
-          hr(),
-          h3("Download"),
-          downloadButton(
-            "PRISMAflowdiagramPDF",
-            "PDF"
-          ),
-          downloadButton(
-            "PRISMAflowdiagramPNG",
-            "PNG"
-          ),
-          downloadButton(
-            "PRISMAflowdiagramSVG",
-            "SVG"
-          ),
-          downloadButton(
-            "PRISMAflowdiagramHTML",
-            "Interactive HTML"
-          ),
-          downloadButton(
-            "PRISMAflowdiagramZIP",
-            "Interactive HTML (ZIP)"
-          )
-        ),
-        mainPanel(
-          DiagrammeR::grVizOutput(
-            outputId = "plot1",
-            width = "100%",
-            height = "700px"
-          )
         )
       )
     ),
