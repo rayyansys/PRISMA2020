@@ -22,6 +22,7 @@ ui <- tagList(
       rel = "shortcut icon",
       href = "favicon.ico"
     ),
+    tags$link(rel = "stylesheet", type = "text/css", href = "shiny.css"),
     # the below enables us to utilise analytics when pushing to shinyapps.io.
     # if self hosting you can insert your own analytics code here
     # it is your responsibility to ensure compliance with regulations such as
@@ -40,7 +41,7 @@ ui <- tagList(
     }
   ),
   navbarPage(
-    "PRISMA Flow Diagram",
+    title=div(img(src="rayyan.svg")),
     position = "fixed-top",
     # Tab 1 ----
     tabPanel("Home",
