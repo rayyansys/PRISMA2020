@@ -71,8 +71,8 @@ ui <- tagList(
               "other",
               "Other searches for studies",
               choices <- c(
-                "Included",
-                "Not included"
+                "Not included",
+                "Included"
               )
             )
           ),
