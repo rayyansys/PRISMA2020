@@ -1202,6 +1202,21 @@ PRISMA_data <- function(data) { #nolint
   # Ensure data is a df, not a tibble;
   # tibbles do not return vectors using df[, 1].
   data <- as.data.frame(data)
+  
+  # Helper function to split reason/count pairs on the LAST comma
+  # This allows reasons to contain commas without breaking the parsing
+  split_reason_n <- function(vec) {
+    if (length(vec) == 0 || (length(vec) == 1 && vec[1] == "")) {
+      return(data.frame(reason = character(0), n = character(0)))
+    }
+    # Use regex to capture everything before the last comma as reason
+    # and everything after as n (count)
+    # Pattern: ^(.*),\s*([^,]+)$
+    reasons <- sub("^(.*),\\s*([^,]+)$", "\\1", vec)
+    counts <- sub("^(.*),\\s*([^,]+)$", "\\2", vec)
+    return(data.frame(reason = reasons, n = counts, stringsAsFactors = FALSE))
+  }
+  
   #Set parameters
   previous_studies <- scales::comma(
     as.numeric(
@@ -1243,75 +1258,33 @@ PRISMA_data <- function(data) { #nolint
       ]$n
     )
   )
-  database_specific_results <- data.frame(
-    reason = gsub(
-      ",.*$",
-      "",
-      unlist(
-        strsplit(
-          as.character(
-            data[
-              grep(
-                "database_specific_results",
-                data[, 1]
-              ),
-            ]$n
-          ),
-          split = "; "
-        )
-      )
-    ),
-    n = gsub(
-      ".*,",
-      "",
-      unlist(
-        strsplit(
-          as.character(
-            data[
-              grep(
-                "database_specific_results",
-                data[, 1]
-              ),
-            ]$n
-          ),
-          split = "; "
-        )
+  database_specific_results <- split_reason_n(
+    unlist(
+      strsplit(
+        as.character(
+          data[
+            grep(
+              "database_specific_results",
+              data[, 1]
+            ),
+          ]$n
+        ),
+        split = "; "
       )
     )
   )
-  register_specific_results <- data.frame(
-    reason = gsub(
-      ",.*$",
-      "",
-      unlist(
-        strsplit(
-          as.character(
-            data[
-              grep(
-                "register_specific_results",
-                data[, 1]
-              ),
-            ]$n
-          ),
-          split = "; "
-        )
-      )
-    ),
-    n = gsub(
-      ".*,",
-      "",
-      unlist(
-        strsplit(
-          as.character(
-            data[
-              grep(
-                "register_specific_results",
-                data[, 1]
-              ),
-            ]$n
-          ),
-          split = "; "
-        )
+  register_specific_results <- split_reason_n(
+    unlist(
+      strsplit(
+        as.character(
+          data[
+            grep(
+              "register_specific_results",
+              data[, 1]
+            ),
+          ]$n
+        ),
+        split = "; "
       )
     )
   )
@@ -1445,39 +1418,18 @@ PRISMA_data <- function(data) { #nolint
       ]$n
     )
   )
-  dbr_excluded <- data.frame(
-    reason = gsub(
-      ",.*$",
-      "",
-      unlist(
-        strsplit(
-          as.character(
-            data[
-              grep(
-                "dbr_excluded",
-                data[, 1]
-              ),
-            ]$n
-          ),
-          split = "; "
-        )
-      )
-    ),
-    n = gsub(
-      ".*,",
-      "",
-      unlist(
-        strsplit(
-          as.character(
-            data[
-              grep(
-                "dbr_excluded",
-                data[, 1]
-              ),
-            ]$n
-          ),
-          split = "; "
-        )
+  dbr_excluded <- split_reason_n(
+    unlist(
+      strsplit(
+        as.character(
+          data[
+            grep(
+              "dbr_excluded",
+              data[, 1]
+            ),
+          ]$n
+        ),
+        split = "; "
       )
     )
   )
@@ -1491,39 +1443,18 @@ PRISMA_data <- function(data) { #nolint
       ]$n
     )
   )
-  other_excluded <- data.frame(
-    reason = gsub(
-      ",.*$",
-      "",
-      unlist(
-        strsplit(
-          as.character(
-            data[
-              grep(
-                "other_excluded",
-                data[, 1]
-              ),
-            ]$n
-          ),
-          split = "; "
-        )
-      )
-    ),
-    n = gsub(
-      ".*,",
-      "",
-      unlist(
-        strsplit(
-          as.character(
-            data[
-              grep(
-                "other_excluded",
-                data[, 1]
-              ),
-            ]$n
-          ),
-          split = "; "
-        )
+  other_excluded <- split_reason_n(
+    unlist(
+      strsplit(
+        as.character(
+          data[
+            grep(
+              "other_excluded",
+              data[, 1]
+            ),
+          ]$n
+        ),
+        split = "; "
       )
     )
   )
