@@ -240,7 +240,7 @@ PRISMA_flowdiagram <- function( #nolint
         paste(
           paste(
             "\n",
-            other_excluded[, 1],
+            PRISMA_escape_text_(other_excluded[, 1]),
             " (n = ", other_excluded[, 2], ")",
             sep = ""
           ),
@@ -375,7 +375,7 @@ PRISMA_flowdiagram <- function( #nolint
       paste(
         paste(
           "\n",
-          dbr_excluded[, 1],
+          PRISMA_escape_text_(dbr_excluded[, 1]),
           " (n = ", dbr_excluded[, 2], ")",
         sep = ""
         ),
@@ -1447,7 +1447,7 @@ PRISMA_data <- function(data) { #nolint
   )
   dbr_excluded <- data.frame(
     reason = gsub(
-      ",.*$",
+      ",\\s*\\d+\\s*$",
       "",
       unlist(
         strsplit(
@@ -1464,8 +1464,8 @@ PRISMA_data <- function(data) { #nolint
       )
     ),
     n = gsub(
-      ".*,",
-      "",
+      "^.*,\\s*(\\d+)\\s*$",
+      "\\1",
       unlist(
         strsplit(
           as.character(
@@ -1493,7 +1493,7 @@ PRISMA_data <- function(data) { #nolint
   )
   other_excluded <- data.frame(
     reason = gsub(
-      ",.*$",
+      ",\\s*\\d+\\s*$",
       "",
       unlist(
         strsplit(
@@ -1510,8 +1510,8 @@ PRISMA_data <- function(data) { #nolint
       )
     ),
     n = gsub(
-      ".*,",
-      "",
+      "^.*,\\s*(\\d+)\\s*$",
+      "\\1",
       unlist(
         strsplit(
           as.character(
