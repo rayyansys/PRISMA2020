@@ -1,5 +1,17 @@
 # Utility functions for PRISMA_flowdiagram
 
+#' Escape special characters for DOT syntax
+#' @keywords internal
+PRISMA_escape_text_ <- function(text) { #nolint
+  if (is.null(text)) return(text)
+  text <- as.character(text)
+  # Escape backslashes first, then quotes and apostrophes
+  text <- gsub("\\", "\\\\", text, fixed = TRUE)
+  text <- gsub('"', '\\"', text, fixed = TRUE)
+  text <- gsub("'", "\\'", text, fixed = TRUE)
+  return(text)
+}
+
 #' Calculate the correct height of a box from a list (e.g. of exclusion reasons)
 #' @description Get the correct height for a box
 #' @param n the number of rows of text in the label
