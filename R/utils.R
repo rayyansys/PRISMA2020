@@ -5,10 +5,9 @@
 PRISMA_escape_text_ <- function(text) { #nolint
   if (is.null(text)) return(text)
   text <- as.character(text)
-  # Escape backslashes first, then quotes and apostrophes
-  text <- gsub("\\", "\\\\", text, fixed = TRUE)
+  # Escape double quotes and apostrophes for DOT syntax
   text <- gsub('"', '\\"', text, fixed = TRUE)
-  text <- gsub("'", "\\'", text, fixed = TRUE)
+  text <- gsub("'", "&#39;", text, fixed = TRUE)
   return(text)
 }
 
