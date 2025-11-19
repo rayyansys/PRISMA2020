@@ -1447,7 +1447,7 @@ PRISMA_data <- function(data) { #nolint
   )
   dbr_excluded <- data.frame(
     reason = gsub(
-      ",\\s*\\d+\\s*$",
+      ",.*$",
       "",
       unlist(
         strsplit(
@@ -1464,8 +1464,8 @@ PRISMA_data <- function(data) { #nolint
       )
     ),
     n = gsub(
-      "^.*,\\s*(\\d+)\\s*$",
-      "\\1",
+      ".*,",
+      "",
       unlist(
         strsplit(
           as.character(
@@ -1493,7 +1493,7 @@ PRISMA_data <- function(data) { #nolint
   )
   other_excluded <- data.frame(
     reason = gsub(
-      ",\\s*\\d+\\s*$",
+      ",.*$",
       "",
       unlist(
         strsplit(
@@ -1510,8 +1510,8 @@ PRISMA_data <- function(data) { #nolint
       )
     ),
     n = gsub(
-      "^.*,\\s*(\\d+)\\s*$",
-      "\\1",
+      ".*,",
+      "",
       unlist(
         strsplit(
           as.character(
